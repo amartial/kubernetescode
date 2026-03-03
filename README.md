@@ -10,7 +10,7 @@ Jenkins is installed on EC2. Follow the instructions on https://www.jenkins.io/d
 
 3. Run `sudo chmod 666 /var/run/docker.sock` on the EC2 after Docker is installed.
 
-4. Install Git on the EC2 by running `sudo yum install git`
+4. Install Git on the EC2 by running `sudo yum install git`.
 
 ### Jenkins plugins
 
