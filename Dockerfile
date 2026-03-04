@@ -1,12 +1,30 @@
-# syntax=docker/dockerfile:1
+# Image officielle Python
+FROM python:3.12-slim
 
-FROM python:3.8-slim-buster
+# Variables d'environnement
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
+# Dossier de travail
 WORKDIR /app
 
-COPY requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt
+# Installer dépendances système minimales
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
 
+# Copier requirements
+COPY requirements.txt .
+
+# Installer dépendances Python
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Copier le projet
 COPY . .
 
-CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
+# Exposer le port
+EXPOSE 5000
+
+# Commande de démarrage (production)
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
